@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/*
+ * Jolify design tokens. Warm "paper" neutrals tinted toward the ink hue, one ember accent,
+ * a glacier blue for links/info and a steppe green for success. Ink is a deep night teal-navy.
+ */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #0F1B26;
+  --color-snow: #F6F3EE;
+  --color-paper: #FBF9F5;
+
+  --color-glacier-50: #EEF5F8;
+  --color-glacier-100: #DCEAF0;
+  --color-glacier-200: #BCD6E1;
+  --color-glacier-500: #3C7F9C;
+  --color-glacier-700: #23607A;
+  --color-glacier-900: #123A4B;
+
+  --color-apricot-100: #FBE7DA;
+  --color-apricot-500: #E2703A;
+  --color-apricot-600: #C65B28;
+
+  --color-steppe-100: #E6F0E2;
+  --color-steppe-600: #4A7A3A;
+
+  --color-night-900: #0B141C;
+  --color-night-800: #111E29;
+  --color-night-700: #1A2A37;
+  --color-night-600: #253847;
+}
+
+@layer base {
+  html { -webkit-font-smoothing: antialiased; }
+  body { @apply bg-snow text-ink; font-family: var(--font-sans); }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.025em; text-wrap: balance; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-apricot-100); }
+  :focus-visible { outline: 2px solid var(--color-apricot-500); outline-offset: 2px; }
+}
+
+.hero-bg {
+  background:
+    radial-gradient(1100px 520px at 0% -10%, rgba(60,127,156,.20), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(226,112,58,.16), transparent 55%),
+    linear-gradient(180deg, #FBF9F5 0%, #F6F3EE 100%);
+}
+.ridge {
+  background: linear-gradient(180deg, transparent 0 40%, rgba(15,27,38,.05) 40% 100%);
+  clip-path: polygon(0 100%, 0 70%, 8% 52%, 14% 62%, 22% 38%, 30% 55%, 38% 30%, 46% 50%, 55% 24%, 63% 46%, 71% 34%, 80% 56%, 88% 40%, 100% 60%, 100% 100%);
+}
+.maplibregl-popup-content { border-radius: 14px !important; padding: 12px 14px !important; background: #111E29 !important; color: #F6F3EE !important; box-shadow: 0 10px 30px -10px rgba(0,0,0,.55) !important; }
+.maplibregl-popup-tip { border-top-color: #111E29 !important; border-bottom-color: #111E29 !important; }
+.maplibregl-ctrl-group { background: #111E29 !important; }
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }

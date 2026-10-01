@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", "lib": ["ES2023", "DOM"], "module": "ESNext", "moduleResolution": "Bundler",
+    "strict": true, "noEmit": true, "allowImportingTsExtensions": true, "skipLibCheck": true,
+    "erasableSyntaxOnly": true, "verbatimModuleSyntax": false, "types": ["node"]
+  },
+  "include": ["src/core/**/*.ts", "src/server/handlers.ts", "src/server/repo.ts", "src/server/repo-memory.ts", "src/server/ai/**/*.ts", "tests/**/*.ts"]
+}
