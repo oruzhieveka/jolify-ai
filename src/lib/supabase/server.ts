@@ -1,6 +1,6 @@
 import 'server-only';
 import { cookies } from 'next/headers';
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
 import { env, serverEnv } from '../env';
 
@@ -10,7 +10,7 @@ export async function supabaseServer() {
   return createServerClient(env.supabaseUrl, env.supabaseAnonKey, {
     cookies: {
       getAll: () => store.getAll(),
-      setAll: (list) => {
+            setAll: (list: { name: string; value: string; options?: CookieOptions }[]) => {
         try { list.forEach(({ name, value, options }) => store.set(name, value, options)); } catch { /* called from a Server Component */ }
       },
     },
