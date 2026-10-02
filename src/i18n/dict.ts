@@ -50,7 +50,7 @@ const en = {
   partnerCategories: { accommodation: 'Accommodation', restaurant: 'Restaurant', tour_operator: 'Tour operator', guide: 'Guide', transport: 'Transport', car_rental: 'Car rental', experience: 'Experiences', other: 'Other' },
   footer: { tagline: 'Kyrgyzstan travel, planned with care.', business: 'For businesses', terms: 'Terms', privacy: 'Privacy', partnerTerms: 'Partner terms', mapData: 'Map data © OpenStreetMap contributors, © Mapbox' },
   auth: {
-    title: 'Sign in', email: 'Email', sendLink: 'Email me a sign-in link', noPassword: 'No password needed. A new email creates a traveller account.',
+    title: 'Sign in', email: 'Email', password: 'Password', signInPass: 'Sign in', createAccount: 'Create account', switchToSignUp: 'No account? Sign up', switchToSignIn: 'Have an account? Sign in', or: 'or', google: 'Continue with Google', confirmEmail: 'Check {email}: we sent you a confirmation link.', invalid: 'Invalid email or password.', sendLink: 'Email me a sign-in link', noPassword: 'No password needed. A new email creates a traveller account.',
     checkInbox: 'Check {email}: we sent you a sign-in link.', demoIntro: 'Demo mode: pick a demo account. No password, no real data.', demoAs: 'Continue as {role}',
     signInRequired: 'Please sign in to continue.', failed: 'Sign-in failed. The link may have expired; request a new one.',
     roles: { traveler: 'Traveller', partner: 'Partner', admin: 'Administrator' },
@@ -217,7 +217,7 @@ const ru: Dict = {
   partnerCategories: { accommodation: 'Размещение', restaurant: 'Ресторан', tour_operator: 'Туроператор', guide: 'Гид', transport: 'Транспорт', car_rental: 'Аренда авто', experience: 'Впечатления', other: 'Другое' },
   footer: { tagline: 'Путешествия по Кыргызстану, спланированные с заботой.', business: 'Для бизнеса', terms: 'Условия', privacy: 'Конфиденциальность', partnerTerms: 'Условия для партнёров', mapData: 'Картографические данные © участники OpenStreetMap, © Mapbox' },
   auth: {
-    title: 'Вход', email: 'Email', sendLink: 'Прислать ссылку для входа', noPassword: 'Пароль не нужен. Новый email создаёт аккаунт путешественника.',
+    title: 'Вход', email: 'Email', password: 'Пароль', signInPass: 'Войти', createAccount: 'Создать аккаунт', switchToSignUp: 'Нет аккаунта? Зарегистрироваться', switchToSignIn: 'Уже есть аккаунт? Войти', or: 'или', google: 'Войти через Google', confirmEmail: 'Проверьте {email}: мы отправили ссылку для подтверждения.', invalid: 'Неверный email или пароль.', sendLink: 'Прислать ссылку для входа', noPassword: 'Пароль не нужен. Новый email создаёт аккаунт путешественника.',
     checkInbox: 'Проверьте {email}: мы отправили ссылку для входа.', demoIntro: 'Демо-режим: выберите демо-аккаунт. Без пароля, без реальных данных.', demoAs: 'Войти как {role}',
     signInRequired: 'Пожалуйста, войдите, чтобы продолжить.', failed: 'Не удалось войти. Ссылка могла устареть, запросите новую.',
     roles: { traveler: 'Путешественник', partner: 'Партнёр', admin: 'Администратор' },
@@ -382,7 +382,7 @@ const ky: Dict = {
   partnerCategories: { accommodation: 'Жайгашуу', restaurant: 'Ресторан', tour_operator: 'Туроператор', guide: 'Гид', transport: 'Транспорт', car_rental: 'Авто ижарасы', experience: 'Таасирлер', other: 'Башка' },
   footer: { tagline: 'Кыргызстан боюнча кам көрүп пландалган саякаттар.', business: 'Бизнес үчүн', terms: 'Шарттар', privacy: 'Купуялык', partnerTerms: 'Өнөктөштөр үчүн шарттар', mapData: 'Карта маалыматтары © OpenStreetMap катышуучулары, © Mapbox' },
   auth: {
-    title: 'Кирүү', email: 'Электрондук почта', sendLink: 'Кирүү шилтемесин жөнөтүү', noPassword: 'Сырсөз керек эмес. Жаңы почта саякатчы аккаунтун түзөт.',
+    title: 'Кирүү', email: 'Электрондук почта', password: 'Сырсөз', signInPass: 'Кирүү', createAccount: 'Аккаунт түзүү', switchToSignUp: 'Аккаунтуңуз жокпу? Катталыңыз', switchToSignIn: 'Аккаунтуңуз барбы? Кирүү', or: 'же', google: 'Google аркылуу кирүү', confirmEmail: '{email} текшериңиз: ырастоо шилтемесин жөнөттүк.', invalid: 'Почта же сырсөз туура эмес.', sendLink: 'Кирүү шилтемесин жөнөтүү', noPassword: 'Сырсөз керек эмес. Жаңы почта саякатчы аккаунтун түзөт.',
     checkInbox: '{email} текшериңиз: кирүү шилтемесин жөнөттүк.', demoIntro: 'Демо режим: демо аккаунтту тандаңыз. Сырсөзсүз, чыныгы маалыматсыз.', demoAs: '{role} катары кирүү',
     signInRequired: 'Улантуу үчүн кириңиз.', failed: 'Кирүү ишке ашкан жок. Шилтеменин мөөнөтү бүткөн болушу мүмкүн, жаңысын сураңыз.',
     roles: { traveler: 'Саякатчы', partner: 'Өнөктөш', admin: 'Администратор' },

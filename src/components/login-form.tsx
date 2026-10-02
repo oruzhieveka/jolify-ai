@@ -9,7 +9,9 @@ const ROLES = ['traveler', 'partner', 'admin'] as const;
 
 export function LoginForm({ demo, next, error }: { demo: boolean; next: string; error: string | null }) {
   const { t } = useI18n();
-  const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [mode, setMode] = useState<'signIn' | 'signUp'>('signIn');
   const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
   const [err, setErr] = useState<string | null>(error);
 
@@ -30,20 +32,45 @@ export function LoginForm({ demo, next, error }: { demo: boolean; next: string; 
     );
   }
 
-  async function submit(e: React.FormEvent) {
+    async function submit(e: React.FormEvent) {
     e.preventDefault(); setErr(null); setState('busy');
     const sb = supabaseBrowser();
     if (!sb) { setErr(t.authExtra.notConfigured); setState('idle'); return; }
-    const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin + '/api/auth/callback?next=' + encodeURIComponent(next) } });
-    if (error) { setErr(/rate|limit/i.test(error.message) ? t.errors.rate_limited : t.auth.failed); setState('idle'); } else setState('sent');
+    if (mode === 'signUp') {
+      const { data, error } = await sb.auth.signUp({ email, password });
+      if (error) { setErr(t.auth.failed); setState('idle'); }
+      else if (!data.session) { setState('sent'); } // в Supabase включено подтверждение email
+      else window.location.assign(next); // подтверждение выключено — вошли сразу
+      return;
+    }
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) { setErr(/invalid/i.test(error.message) ? t.auth.invalid : t.auth.failed); setState('idle'); }
+    else window.location.assign(next);
   }
-  if (state === 'sent') return <Alert tone="ok" className="mt-4">{fmt(t.auth.checkInbox, { email })}</Alert>;
-  return (
+
+  async function google() {
+    setErr(null);
+    const sb = supabaseBrowser();
+    if (!sb) { setErr(t.authExtra.notConfigured); return; }
+    await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + '/api/auth/callback?next=' + encodeURIComponent(next) },
+    });
+  }
+    if (state === 'sent') return <Alert tone="ok" className="mt-4">{fmt(t.auth.confirmEmail, { email })}</Alert>;
+    return (
     <form onSubmit={submit} className="mt-4 space-y-3">
       <div><Label htmlFor="em">{t.auth.email}</Label><Input id="em" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} /></div>
+      <div><Label htmlFor="pw">{t.auth.password}</Label><Input id="pw" type="password" required minLength={6} autoComplete={mode === 'signIn' ? 'current-password' : 'new-password'} value={password} onChange={(e) => setPassword(e.target.value)} /></div>
       {err && <Alert tone="error">{err}</Alert>}
-      <Button className="w-full" disabled={state === 'busy' || !email}>{state === 'busy' && <Spinner />}{t.auth.sendLink}</Button>
-      <p className="text-xs text-ink/50">{t.auth.noPassword}</p>
+      <Button className="w-full" disabled={state === 'busy' || !email || !password}>{state === 'busy' && <Spinner />}{mode === 'signIn' ? t.auth.signInPass : t.auth.createAccount}</Button>
+      <button type="button" onClick={() => setMode(mode === 'signIn' ? 'signUp' : 'signIn')} className="w-full text-center text-xs text-ink/60 hover:underline">
+        {mode === 'signIn' ? t.auth.switchToSignUp : t.auth.switchToSignIn}
+      </button>
+      <div className="flex items-center gap-3 py-1"><span className="h-px flex-1 bg-ink/10" /><span className="text-xs text-ink/50">{t.auth.or}</span><span className="h-px flex-1 bg-ink/10" /></div>
+      <button type="button" onClick={google} className="w-full rounded-xl border border-ink/10 p-3 text-center font-medium hover:border-ink/30 hover:bg-ink/5">
+        {t.auth.google}
+      </button>
     </form>
   );
 }
