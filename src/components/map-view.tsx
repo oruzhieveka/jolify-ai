@@ -88,7 +88,7 @@ export function MapView({ points, route, selectedId, onSelect, cluster = false, 
           const f = m.queryRenderedFeatures(e.point, { layers: ['clusters'] })[0];
           const src = m.getSource('points') as GeoJSONSource;
           const zoom = await src.getClusterExpansionZoom(f.properties?.cluster_id);
-          m.easeTo({ center: (f.geometry as { coordinates: [number, number] }).coordinates, zoom });
+          m.easeTo({ center: (f.geometry as unknown as { coordinates: [number, number] }).coordinates, zoom });
         });
       }
       m.addLayer({ id: 'pts', type: 'circle', source: 'points', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['get', 'color'], 'circle-radius': 8, 'circle-stroke-width': 3, 'circle-stroke-color': '#fff' } });
