@@ -138,7 +138,15 @@ const en = {
     moderation: { applications: 'Partner applications', listings: 'Listings to review', noApps: 'No applications waiting.', noListings: 'No listings waiting.', consents: 'Consents' },
     payments: { intro: 'No payment provider is connected. Payments appear here only when a provider webhook records them; test payments are labelled and never count as revenue.', empty: 'No payments recorded.', revenue: 'Real revenue' },
     leads: { intro: 'All pending booking requests on the platform.' }, bookings: { intro: 'All booking requests and their status.' },
-    locations: { intro: 'Curated destinations shown on the map and in the planner.', edit: 'Edit content', publish: 'Publish', unpublish: 'Unpublish', complete: 'complete', missing: 'missing' },
+        locations: {
+      intro: 'Curated destinations shown on the map and in the planner.', edit: 'Edit content', publish: 'Publish', unpublish: 'Unpublish', complete: 'complete', missing: 'missing', new: 'New location', editData: 'Edit data',
+      form: {
+        intro: 'Changes are saved to Supabase immediately and become available to the map, AI planner and AI assistant. Add RU/KG translations on the content page.', base: 'Names and descriptions', planner: 'Planner and map data', details: 'English detail sections',
+        id: 'URL slug (unique, latin, digits, hyphens)', nameEn: 'Name (English)', nameRu: 'Name (Russian)', nameKy: 'Name (Kyrgyz)', descriptionEn: 'Description (English)', descriptionRu: 'Description (Russian)', descriptionKy: 'Description (Kyrgyz)',
+        region: 'Region', lat: 'Latitude', lon: 'Longitude', season: 'Season', duration: 'Duration', difficulty: 'Difficulty', budget: 'Budget per day (USD)', order: 'Route order', popularity: 'Popularity', zone: 'Zone', tags: 'Tags (comma separated)', activities: 'Activities (one per line)', tips: 'Tips (one per line)', dayTitle: 'Planner day title',
+        altitude: 'Altitude (m)', nearby: 'Nearby destination IDs (comma separated)', howToGetThere: 'How to get there (English)', history: 'History (English)', culture: 'Culture (English)', safety: 'Good to know (English)', published: 'Published', create: 'Create location', save: 'Save location', created: 'Location created. Opening the translation editor...', saved: 'Location saved',
+      },
+    },
     content: {
       title: 'Content: {name}', intro: 'Curated text per language. Do not paste machine translations without review.', nameField: 'Name', descriptionField: 'Description', activities: 'Activities (one per line)', tips: 'Tips (one per line)',
       howToGetThere: 'How to get there', history: 'History', culture: 'Culture', safety: 'Good to know', save: 'Save content', saved: 'Content saved', back: 'Back to locations', english: 'English (source)', photos: 'Curated photos', photosNote: 'Only upload photos you have the right to use. Author and licence are required and shown on the site.',
