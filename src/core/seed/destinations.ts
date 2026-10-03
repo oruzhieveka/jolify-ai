@@ -1,7 +1,8 @@
 import type { Destination } from '../types.ts';
+import { DESTINATION_TRANSLATIONS } from './destination-translations.ts';
 // Generated once from the prototype (index.html). Demo data: every listing/partner is_demo=true
 // and is labelled as a sample in the UI. Prices are illustrative, not quotes from real businesses.
-export const DESTINATIONS: Destination[] = [
+const BASE_DESTINATIONS: Destination[] = [
  {
   "id": "bishkek",
   "name": {
