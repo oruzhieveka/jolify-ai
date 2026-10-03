@@ -148,8 +148,8 @@ export function MapView({ points, route, selectedId, onSelect, cluster = false, 
   }
 
   return (
-    <div className={'relative overflow-hidden rounded-2xl bg-night-800 ' + (className ?? 'h-[420px]')}>
-      <div ref={el} className="absolute inset-0" aria-label={labels.map} role="region" />
+    <div className={'relative min-h-[320px] overflow-hidden rounded-2xl bg-night-800 ' + (className ?? 'h-[420px]')}>
+      <div ref={el} className="absolute inset-0 h-full w-full" aria-label={labels.map} role="region" />
       {state === 'loading' && <div className="absolute inset-0 grid place-items-center text-sm text-snow/60">{labels.loading}</div>}
       {state === 'error' && <div role="alert" className="absolute inset-0 grid place-items-center p-6 text-center text-sm text-snow/70">{labels.error}</div>}
       {state === 'ready' && (
