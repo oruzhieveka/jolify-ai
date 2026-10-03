@@ -8,7 +8,7 @@ import type { ConsentRecord, PartnerApplicationInput } from '../core/consent.ts'
 import type { ListingInput } from '../core/listing-schema.ts';
 import type { EventRow } from '../core/analytics.ts';
 import { DEFAULT_SETTINGS } from './repo.ts';
-import type { ApplicationRow, BookingEvent, BookingMessage, BookingRecord, ConversationRow, DestinationPatch, ListingQuery, PaymentRow, PlatformSettings, ProfileRow, Repo, TripRow } from './repo.ts';
+import type { ApplicationRow, BookingEvent, BookingMessage, BookingRecord, ConversationRow, DestinationInput, DestinationPatch, ListingQuery, PaymentRow, PlatformSettings, ProfileRow, Repo, TripRow } from './repo.ts';
 
 export const toProfile = (p: Partner, extra: Partial<PartnerProfile> = {}): PartnerProfile => ({
   ...p, description: '', destinationId: null, address: '', phone: '', email: '', website: '',
@@ -206,6 +206,12 @@ export class MemoryRepo implements Repo {
   async allBookings() { return [...this.bookingRows].sort((a, b) => b.created_at.localeCompare(a.created_at)); }
   async payments() { return this.paymentRows; }
   async allDestinations() { return this.destinations; }
+  async createDestination(input: DestinationInput) {
+    const d: Destination = { ...input, tags: [...input.tags], activities: [...input.activities], tips: [...input.tips], details: { ...(input.details ?? {}) }, i18n: input.i18n ?? {} };
+    this.destinations.push(d);
+    this.destinations.sort((a, b) => a.order - b.order);
+    return d;
+  }
   async updateDestination(id: string, patch: DestinationPatch) {
     const d = this.destinations.find((x) => x.id === id); if (!d) return null;
     Object.assign(d, Object.fromEntries(Object.entries(patch).filter(([, v]) => v !== undefined)));

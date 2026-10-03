@@ -12,7 +12,7 @@ import type { ConsentRecord, PartnerApplicationInput } from '../core/consent.ts'
 import type { ListingInput } from '../core/listing-schema.ts';
 import type { EventRow } from '../core/analytics.ts';
 import { DEFAULT_SETTINGS } from './repo.ts';
-import type { ApplicationRow, BookingEvent, BookingMessage, BookingRecord, ConversationRow, DestinationPatch, ListingQuery, PaymentRow, PlatformSettings, ProfileRow, Repo, TripRow } from './repo.ts';
+import type { ApplicationRow, BookingEvent, BookingMessage, BookingRecord, ConversationRow, DestinationInput, DestinationPatch, ListingQuery, PaymentRow, PlatformSettings, ProfileRow, Repo, TripRow } from './repo.ts';
 
 type Row = Record<string, any>;
 const toListing = (r: Row): Listing => ({
@@ -26,6 +26,18 @@ const toDest = (r: Row): Destination => ({
   description: r.description, tips: r.tips ?? [], order: r.sort_order, popularity: r.popularity, zone: r.zone, dayTitle: r.day_title, details: r.details ?? {},
   i18n: r.i18n ?? {}, published: r.published,
 });
+const toDestRow = (d: DestinationInput): Row => ({
+  id: d.id, name: d.name, region: d.region, lat: d.lat, lon: d.lon, season: d.season, duration: d.duration,
+  difficulty: d.difficulty, budget_per_day_usd: d.budgetPerDayUsd, tags: d.tags, activities: d.activities,
+  description: d.description, tips: d.tips, sort_order: d.order, popularity: d.popularity, zone: d.zone,
+  day_title: d.dayTitle, details: d.details ?? {}, i18n: d.i18n ?? {}, published: d.published,
+});
+const toDestPatch = (p: DestinationPatch): Row => {
+  const out: Row = {};
+  const map: Record<string, string> = { budgetPerDayUsd: 'budget_per_day_usd', order: 'sort_order', dayTitle: 'day_title' };
+  for (const [k, v] of Object.entries(p)) if (v !== undefined) out[map[k] ?? k] = v;
+  return out;
+};
 const PARTNER_COLS = 'id, name, category, city, verified, is_demo, description, destination_id, address, phone, email, website, social, opening_hours, services, amenities, price_note, status, created_at';
 const toPartner = (r: Row): PartnerProfile => ({
   id: r.id, name: r.name, category: r.category, city: r.city, verified: r.verified, isDemo: r.is_demo, description: r.description ?? '', destinationId: r.destination_id ?? null,
@@ -223,9 +235,11 @@ export class SupabaseRepo implements Repo {
       .map((r) => ({ ...(r as PaymentRow), amount_usd: Number(r.amount_usd) }));
   }
   async allDestinations() { return (must(await this.db.from('destinations').select('*').order('sort_order')) as Row[]).map(toDest); }
+  async createDestination(input: DestinationInput) {
+    return toDest(must(await this.db.from('destinations').insert(toDestRow(input)).select('*').single()));
+  }
   async updateDestination(id: string, p: DestinationPatch) {
-    const patch: Row = {};
-    for (const [k, v] of Object.entries(p)) if (v !== undefined) patch[k] = v;
+    const patch = toDestPatch(p);
     const r = await this.db.from('destinations').update(patch).eq('id', id).select('*').maybeSingle();
     return r.data ? toDest(r.data) : null;
   }

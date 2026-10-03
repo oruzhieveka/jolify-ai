@@ -22,7 +22,30 @@ export interface ProfileRow { id: string; email: string | null; full_name: strin
 export interface PaymentRow { id: string; booking_id: string; provider: string; provider_ref: string | null; is_test: boolean; status: PaymentStatus; amount_usd: number; currency: string; created_at: string }
 export interface PlatformSettings { maintenance_banner: Localized | null; inquiries_enabled: boolean; ai_enabled: boolean; partner_applications_open: boolean }
 export const DEFAULT_SETTINGS: PlatformSettings = { maintenance_banner: null, inquiries_enabled: true, ai_enabled: true, partner_applications_open: true };
-export interface DestinationPatch { name?: Localized; description?: Localized; i18n?: Destination['i18n']; published?: boolean; season?: string; duration?: string }
+
+export interface DestinationInput {
+  id: string;
+  name: Localized;
+  region: string;
+  lat: number;
+  lon: number;
+  season: string;
+  duration: string;
+  difficulty: string | null;
+  budgetPerDayUsd: number;
+  tags: string[];
+  activities: string[];
+  description: Localized;
+  tips: string[];
+  order: number;
+  popularity: number;
+  zone: Destination['zone'];
+  dayTitle: string;
+  details?: Destination['details'];
+  i18n?: Destination['i18n'];
+  published: boolean;
+}
+export type DestinationPatch = Partial<Omit<DestinationInput, 'id'>>;
 
 export interface ConversationRow { id: string; user_id: string; title: string; lang: string; messages: { role: 'user' | 'assistant'; content: string; at: string }[]; created_at: string; updated_at: string }
 
@@ -94,6 +117,7 @@ export interface Repo {
   allBookings(): Promise<BookingRecord[]>;
   payments(): Promise<PaymentRow[]>;
   allDestinations(): Promise<Destination[]>;
+  createDestination(input: DestinationInput): Promise<Destination>;
   updateDestination(id: string, patch: DestinationPatch): Promise<Destination | null>;
   getSettings(): Promise<PlatformSettings>;
   updateSettings(patch: Partial<PlatformSettings>): Promise<PlatformSettings>;

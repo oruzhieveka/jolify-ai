@@ -33,13 +33,52 @@ const langBlock = z.object({
   dayTitle: z.string().trim().max(120).optional(),
   details: z.object({ howToGetThere: z.string().max(2000).optional(), history: z.string().max(4000).optional(), culture: z.string().max(4000).optional(), safety: z.string().max(2000).optional() }).optional(),
 }).optional();
+const cleanLoc = (o?: { en: string; ru?: string; ky?: string }) => o && Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && v !== '')) as { en: string; ru?: string; ky?: string };
+const detailsSchema = z.object({
+  history: z.string().trim().max(4000).optional(),
+  culture: z.string().trim().max(4000).optional(),
+  howToGetThere: z.string().trim().max(2000).optional(),
+  safety: z.string().trim().max(2000).optional(),
+  altitudeM: z.number().int().min(0).max(9000).optional(),
+  nearby: z.array(z.string().trim().regex(/^[a-z0-9-]+$/)).max(12).optional(),
+});
+const destinationCreateSchema = z.object({
+  id: z.string().trim().regex(/^[a-z0-9-]+$/).min(2).max(80),
+  name: loc,
+  region: z.string().trim().min(1).max(80),
+  lat: z.number().min(39).max(43.5),
+  lon: z.number().min(69).max(80.5),
+  season: z.string().trim().max(40).default(''),
+  duration: z.string().trim().max(40).default(''),
+  difficulty: z.string().trim().max(40).nullable().default(null),
+  budgetPerDayUsd: z.number().min(0).max(10000),
+  tags: z.array(z.string().trim().min(1).max(40)).max(20).default([]),
+  activities: z.array(z.string().trim().min(1).max(200)).max(20).default([]),
+  description: loc,
+  tips: z.array(z.string().trim().min(1).max(300)).max(20).default([]),
+  order: z.number().min(-1000).max(1000),
+  popularity: z.number().int().min(0).max(100).default(0),
+  zone: z.enum(['hub', 'north', 'south', 'remote', 'west']),
+  dayTitle: z.string().trim().min(1).max(160),
+  details: detailsSchema.default({}),
+  published: z.boolean().default(true),
+});
+const destinationPatchSchema = destinationCreateSchema.omit({ id: true }).partial().extend({ i18n: z.object({ ru: langBlock, ky: langBlock }).optional() });
+
+export async function adminCreateDestination(c: Ctx, body: unknown): Promise<Res> {
+  const a = needAdmin(c); if (a) return a;
+  const p = destinationCreateSchema.safeParse(body); if (!p.success) return err(400, 'Please check the form', p.error.issues);
+  if ((await c.repo.allDestinations()).some((d) => d.id === p.data.id)) return err(409, 'Invalid request', undefined, 'invalid_request');
+  const input = { ...p.data, name: cleanLoc(p.data.name)!, description: cleanLoc(p.data.description)! };
+  const d = await c.repo.createDestination(input);
+  await track(c)('admin_destination_created', { destination_id: d.id });
+  return ok({ destination: d }, 201);
+}
 
 export async function adminUpdateDestination(c: Ctx, id: string, body: unknown): Promise<Res> {
   const a = needAdmin(c); if (a) return a;
-  const p = z.object({ name: loc.optional(), description: loc.optional(), i18n: z.object({ ru: langBlock, ky: langBlock }).optional(), published: z.boolean().optional(), season: z.string().max(40).optional(), duration: z.string().max(40).optional() }).safeParse(body);
-  if (!p.success) return err(400, 'Please check the form', p.error.issues);
-  const clean = (o?: Record<string, string | undefined>) => o && Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined && v !== '')) as { en: string; ru?: string; ky?: string };
-  const d = await c.repo.updateDestination(id, { ...p.data, name: clean(p.data.name), description: clean(p.data.description) });
+  const p = destinationPatchSchema.safeParse(body); if (!p.success) return err(400, 'Please check the form', p.error.issues);
+  const d = await c.repo.updateDestination(id, { ...p.data, name: cleanLoc(p.data.name), description: cleanLoc(p.data.description) });
   if (!d) return err(404, 'Not found');
   await track(c)('admin_content_updated', { destination_id: id });
   return ok({ destination: d });

@@ -807,3 +807,8 @@ export const DESTINATIONS: Destination[] = [
   }
  }
 ];
+
+export const DESTINATIONS: Destination[] = BASE_DESTINATIONS.map((d) => {
+  const tr = DESTINATION_TRANSLATIONS[d.id];
+  return tr ? { ...d, description: { ...d.description, ...tr.description }, i18n: tr.i18n } : d;
+});
