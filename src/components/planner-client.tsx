@@ -10,14 +10,14 @@ import { MapView, type MapPoint } from './map-view';
 import { Alert, Badge, Button, Card, Spinner, Textarea, buttonClass } from './ui';
 
 type Msg = { role: 'user' | 'ai'; text: string; tone?: 'error' };
-interface Outcome { ok: boolean; itinerary: Itinerary | null; reply: string; provider: 'anthropic' | 'rules'; fallbackReason?: string; changed?: number[]; applied?: boolean; error?: string }
+interface Outcome { ok: boolean; itinerary: Itinerary | null; reply: string; provider: 'anthropic' | 'openai_compatible' | 'rules'; fallbackReason?: string; changed?: number[]; applied?: boolean; error?: string }
 
 export function PlannerClient({ locale, t, signedIn, aiConfigured, initialQuery, initial }: {
   locale: string; t: Dict; signedIn: boolean; aiConfigured: boolean; initialQuery: string; initial: { itinerary: Itinerary; tripId: string } | null;
 }) {
   const [it, setIt] = useState<Itinerary | null>(initial?.itinerary ?? null);
   const [tripId, setTripId] = useState<string | null>(initial?.tripId ?? null);
-  const [provider, setProvider] = useState<'anthropic' | 'rules' | null>(null);
+  const [provider, setProvider] = useState<'anthropic' | 'openai_compatible' | 'rules' | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
   const [input, setInput] = useState(initial ? '' : initialQuery);
@@ -90,7 +90,7 @@ export function PlannerClient({ locale, t, signedIn, aiConfigured, initialQuery,
                 <h1 className="text-2xl font-semibold md:text-3xl" data-testid="trip-title">{it.trip_title}</h1>
                 <p className="mt-1 max-w-2xl text-ink/70">{it.summary}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <Badge tone={provider === 'anthropic' ? 'info' : 'neutral'}>{provider === 'anthropic' ? t.providerAi : t.providerRules}</Badge>
+                  <Badge tone={provider === 'rules' ? 'neutral' : 'info'}>{provider === 'rules' ? t.providerRules : t.providerAi}</Badge>
                   <Badge tone="ok">{t.validatedNote}</Badge>
                 </div>
               </div>

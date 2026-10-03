@@ -1,4 +1,6 @@
 'use client';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useI18n } from '@/i18n/client';
 import { errorText, fmt } from '@/i18n/dict';
@@ -92,7 +94,9 @@ export function AssistantChat({ signedIn, initial }: { signedIn: boolean; initia
               <div className="sr-only">{m.role === 'user' ? a.you : a.ai}</div>
               {m.role === 'assistant' && !m.content && busy && i === msgs.length - 1
                 ? <span className="inline-flex items-center gap-2 text-sm text-ink/50"><span className="h-2 w-2 animate-pulse rounded-full bg-apricot-500" />{a.thinking}</span>
-                : <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>}
+                : m.role === 'assistant'
+  ? <div className="assistant-md leading-relaxed"><ReactMarkdown remarkPlugins={[remarkGfm]}>{m.content}</ReactMarkdown></div>
+  : <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>}
               {m.unverified && <p className="mt-2 rounded-lg bg-apricot-100 px-3 py-2 text-xs text-ink/75">{fmt(a.unverifiedPrice, { list: m.unverified.map((p) => '$' + p).join(', ') })}</p>}
               {m.failed && <p className="mt-1 text-xs text-snow/70">{m.failed}</p>}
             </div>

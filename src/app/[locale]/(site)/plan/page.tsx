@@ -20,7 +20,7 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
   }
   return (
     <PlannerClient
-      locale={locale} t={t} signedIn={!!c.user} aiConfigured={!!c.ai.anthropic}
+      locale={locale} t={t} signedIn={!!c.user} aiConfigured={!!c.ai.llm}
       initialQuery={initial ? '' : (sp.q ?? '').slice(0, 2000)} initial={initial}
     />
   );

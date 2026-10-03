@@ -56,3 +56,12 @@
 .maplibregl-ctrl-group { background: #111E29 !important; }
 .maplibregl-ctrl-group button .maplibregl-ctrl-icon { filter: invert(1); }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+/* Assistant markdown */
+.assistant-md > * + * { margin-top: 0.75rem; }
+.assistant-md strong { font-weight: 600; }
+.assistant-md ul { list-style: disc; padding-left: 1.25rem; }
+.assistant-md ol { list-style: decimal; padding-left: 1.25rem; }
+.assistant-md table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-top: 0.75rem; }
+.assistant-md th, .assistant-md td { border: 1px solid rgb(11 18 32 / 0.12); padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+.assistant-md th { background: rgb(11 18 32 / 0.04); font-weight: 600; }
+.assistant-md h1, .assistant-md h2, .assistant-md h3 { font-weight: 700; margin-top: 1rem; }
